@@ -16,31 +16,28 @@ public class Scanner {
         palabrasReservadas.put("distinct", TipoToken.DISTINCT);
     }
 
-    Scanner(String source){
+    public Scanner(String source) {
         this.source = source + " ";
     }
 
-    List<Token> scanTokens(){
+    public List<Token> scanTokens() {
         int estado = 0;
         char caracter = 0;
         String lexema = "";
         int inicioLexema = 0;
 
-        for(int i=0; i<source.length(); i++){
+        for (int i = 0; i < source.length(); i++) {
             caracter = source.charAt(i);
 
-            switch (estado){
+            switch (estado) {
                 case 0:
-                    if(caracter == '*'){
+                    if (caracter == '*') {
                         tokens.add(new Token(TipoToken.ASTERISCO, "*", i + 1));
-                    }
-                    else if(caracter == ','){
+                    } else if (caracter == ',') {
                         tokens.add(new Token(TipoToken.COMA, ",", i + 1));
-                    }
-                    else if(caracter == '.'){
+                    } else if (caracter == '.') {
                         tokens.add(new Token(TipoToken.PUNTO, ".", i + 1));
-                    }
-                    else if(Character.isAlphabetic(caracter)){
+                    } else if (Character.isAlphabetic(caracter)) {
                         estado = 1;
                         lexema = lexema + caracter;
                         inicioLexema = i;
@@ -48,15 +45,13 @@ public class Scanner {
                     break;
 
                 case 1:
-                    if(Character.isAlphabetic(caracter) || Character.isDigit(caracter) ){
+                    if (Character.isAlphabetic(caracter) || Character.isDigit(caracter)) {
                         lexema = lexema + caracter;
-                    }
-                    else{
+                    } else {
                         TipoToken tt = palabrasReservadas.get(lexema);
-                        if(tt == null){
+                        if (tt == null) {
                             tokens.add(new Token(TipoToken.IDENTIFICADOR, lexema, inicioLexema + 1));
-                        }
-                        else{
+                        } else {
                             tokens.add(new Token(tt, lexema, inicioLexema + 1));
                         }
 
